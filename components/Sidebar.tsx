@@ -174,7 +174,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const downloadJSON = (data: any, filename: string) => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const jsonString = JSON.stringify(data, null, 2);
+    // @ts-ignore
+    if (window.AndroidBridge && window.AndroidBridge.saveFile) {
+        // @ts-ignore
+        window.AndroidBridge.saveFile(filename, jsonString);
+        return;
+    }
+    const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;

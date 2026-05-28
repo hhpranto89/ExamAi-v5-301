@@ -109,6 +109,12 @@ export const SetupView: React.FC<SetupViewProps> = ({
       history: history
     };
     const dataStr = JSON.stringify(backup, null, 2);
+    // @ts-ignore
+    if (window.AndroidBridge && window.AndroidBridge.saveFile) {
+        // @ts-ignore
+        window.AndroidBridge.saveFile(generateBackupFilename(currentName), dataStr);
+        return;
+    }
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -374,6 +380,12 @@ export const SetupView: React.FC<SetupViewProps> = ({
       version: 1, timestamp: Date.now(), rawInput: generatedRawInput, config: config, progress: progress, history: history
     };
     const dataStr = JSON.stringify(backup, null, 2);
+    // @ts-ignore
+    if (window.AndroidBridge && window.AndroidBridge.saveFile) {
+        // @ts-ignore
+        window.AndroidBridge.saveFile(generateBackupFilename(examName || "questions"), dataStr);
+        return;
+    }
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
